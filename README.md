@@ -97,6 +97,20 @@ npm run preview
 
 ### GitHub Pages
 
+This repo includes a GitHub Actions workflow (`.github/workflows/deploy-pages.yml`) that publishes the site automatically on every push to `main`.
+
+**One-time setup:**
+
+1. Open [github.com/aryanp333/AASANI/settings/pages](https://github.com/aryanp333/AASANI/settings/pages).
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Push to `main` (or run the workflow manually under **Actions** → **Deploy GitHub Pages** → **Run workflow**).
+
+**Live URL:** [https://aryanp333.github.io/AASANI/](https://aryanp333.github.io/AASANI/)
+
+Local builds use `/` as the base path. Production GitHub Pages builds set `GITHUB_PAGES=true` so assets load under `/AASANI/`.
+
+**Manual GitHub Pages (without Actions):**
+
 GitHub Pages serves from a subpath (`https://<user>.github.io/<repo>/`). Configure Vite `base` in `vite.config.js`:
 
 ```js
@@ -106,7 +120,7 @@ export default defineConfig({
 })
 ```
 
-Then rebuild, deploy `dist/` (e.g. via GitHub Actions or `gh-pages` branch), and enable **Pages** in the repository settings. For client-side routing, add a `404.html` that redirects to `index.html` or use a hash-based router.
+Then rebuild, deploy `dist/` (e.g. via GitHub Actions or `gh-pages` branch), and enable **Pages** in the repository settings. For client-side routing, copy `dist/index.html` to `dist/404.html` after build.
 
 ---
 
