@@ -1,175 +1,89 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, ChevronDown, Mail, Send } from "lucide-react";
-import { faqItems } from "../data/faq";
+import { motion } from "framer-motion";
+import { Calendar, Send } from "lucide-react";
+import { Container, SectionHeader } from "../components/layout/Container";
 import { Button } from "../components/ui/Button";
-import clsx from "clsx";
 
 export function ContactPage() {
-  const [openFaq, setOpenFaq] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    setSubmitted(true);
-  }
+  const [sent, setSent] = useState(false);
 
   return (
-    <div className="pb-24 pt-28">
-      <div className="mx-auto max-w-6xl px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl"
-        >
-          <p className="text-sm font-medium uppercase tracking-wider text-primary">
-            Contact
-          </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Start a conversation
-          </h1>
-          <p className="mt-4 text-muted">
-            Tell us about your data and goals. We will respond within one
-            business day.
-          </p>
-        </motion.div>
-
-        <div className="mt-12 grid gap-12 lg:grid-cols-5">
+    <div className="pt-28 pb-24">
+      <Container>
+        <SectionHeader
+          eyebrow="Contact"
+          title="Partner with AASANI"
+          description="Request a demo or book a consultation with our healthcare intelligence team. We respond within one business day."
+        />
+        <div className="mt-16 grid gap-12 lg:grid-cols-5">
           <motion.form
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            onSubmit={handleSubmit}
-            className="glass shadow-soft space-y-5 rounded-2xl border border-border p-8 lg:col-span-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setSent(true);
+            }}
+            className="card-elevated space-y-5 rounded-2xl border border-border bg-white p-8 lg:col-span-3"
           >
-            {submitted ? (
-              <p className="py-8 text-center text-white">
-                Thank you—we will be in touch shortly. (Demo form, no backend.)
+            {sent ? (
+              <p className="py-12 text-center text-ink">
+                Thank you. A member of our team will contact you shortly.
               </p>
             ) : (
               <>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="text-sm text-muted">Name</span>
-                    <input
-                      required
-                      className="mt-2 w-full rounded-xl border border-border bg-bg px-4 py-3 text-white outline-none transition focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                      placeholder="Jane Smith"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="text-sm text-muted">Company</span>
-                    <input
-                      required
-                      className="mt-2 w-full rounded-xl border border-border bg-bg px-4 py-3 text-white outline-none transition focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                      placeholder="Acme Ltd"
-                    />
-                  </label>
+                  <Field label="Full name" placeholder="Jordan Lee" />
+                  <Field label="Organisation" placeholder="Northbridge Health" />
                 </div>
+                <Field label="Work email" type="email" placeholder="jordan.lee@health.org" />
+                <Field label="Role" placeholder="Chief Operating Officer" />
                 <label className="block">
-                  <span className="text-sm text-muted">Email</span>
-                  <input
-                    type="email"
-                    required
-                    className="mt-2 w-full rounded-xl border border-border bg-bg px-4 py-3 text-white outline-none transition focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                    placeholder="you@company.com"
-                  />
-                </label>
-                <label className="block">
-                  <span className="text-sm text-muted">Message</span>
+                  <span className="text-sm font-medium text-muted">How can we help?</span>
                   <textarea
                     required
                     rows={4}
-                    className="mt-2 w-full resize-none rounded-xl border border-border bg-bg px-4 py-3 text-white outline-none transition focus:border-primary/50 focus:ring-1 focus:ring-primary/30"
-                    placeholder="Describe your data and what you need from analytics…"
+                    className="mt-2 w-full rounded-xl border border-border px-4 py-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    placeholder="Describe your systems, priorities, and timeline…"
                   />
                 </label>
-                <Button type="submit" className="w-full sm:w-auto">
-                  <Send className="h-4 w-4" />
-                  Send message
+                <Button type="submit">
+                  <Send className="h-4 w-4" /> Request Demo
                 </Button>
               </>
             )}
           </motion.form>
-
-          <motion.aside
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="space-y-6 lg:col-span-2"
-          >
-            <div className="glass shadow-soft rounded-2xl border border-border p-6">
-              <div className="flex items-center gap-3 text-white">
-                <Mail className="h-5 w-5 text-primary" />
-                <span className="font-semibold">Company email</span>
-              </div>
-              <a
-                href="mailto:hello@aasani.com"
-                className="mt-3 block text-accent hover:underline"
-              >
-                hello@aasani.com
-              </a>
+          <aside className="space-y-6 lg:col-span-2">
+            <div className="card-elevated rounded-2xl border border-border bg-surface-muted p-8">
+              <h3 className="font-semibold text-ink">Enterprise sales</h3>
+              <p className="mt-2 text-sm text-muted">hello@aasani.com</p>
             </div>
-            <div className="glass shadow-soft rounded-2xl border border-border p-6">
-              <p className="font-semibold text-white">Prefer a call?</p>
+            <div className="card-elevated rounded-2xl border border-border bg-white p-8">
+              <h3 className="font-semibold text-ink">Executive consultation</h3>
               <p className="mt-2 text-sm text-muted">
-                Book a consultation with our team to scope your first project.
+                A 45-minute session to map your data estate and executive KPIs.
               </p>
               <Button
                 href="mailto:hello@aasani.com?subject=Book%20Consultation"
                 variant="secondary"
-                className="mt-4 w-full"
+                className="mt-6 w-full"
               >
-                <Calendar className="h-4 w-4" />
-                Book Consultation
+                <Calendar className="h-4 w-4" /> Book Consultation
               </Button>
             </div>
-          </motion.aside>
+          </aside>
         </div>
-
-        <section className="mt-24">
-          <h2 className="text-2xl font-bold text-white">FAQ</h2>
-          <ul className="mt-8 space-y-3">
-            {faqItems.map((item, i) => {
-              const open = openFaq === i;
-              return (
-                <li
-                  key={item.q}
-                  className="overflow-hidden rounded-2xl border border-border bg-card/60"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(open ? -1 : i)}
-                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-                  >
-                    <span className="font-medium text-white">{item.q}</span>
-                    <ChevronDown
-                      className={clsx(
-                        "h-5 w-5 shrink-0 text-muted transition-transform",
-                        open && "rotate-180",
-                      )}
-                    />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {open && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                      >
-                        <p className="border-t border-border px-6 pb-5 pt-2 text-sm leading-relaxed text-muted">
-                          {item.a}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      </div>
+      </Container>
     </div>
+  );
+}
+
+function Field({ label, ...props }) {
+  return (
+    <label className="block">
+      <span className="text-sm font-medium text-muted">{label}</span>
+      <input
+        required
+        className="mt-2 w-full rounded-xl border border-border px-4 py-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        {...props}
+      />
+    </label>
   );
 }

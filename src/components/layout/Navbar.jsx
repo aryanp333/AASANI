@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "../ui/Button";
 import clsx from "clsx";
+import { Button } from "../ui/Button";
+import { Container } from "./Container";
 
 const links = [
-  { to: "/", label: "Home" },
-  { to: "/simulation", label: "Simulation" },
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/about", label: "About" },
+  { to: "/platform", label: "Platform" },
+  { to: "/solutions", label: "Solutions" },
+  { to: "/integrations", label: "Integrations" },
+  { to: "/security", label: "Security" },
+  { to: "/pricing", label: "Pricing" },
+  { to: "/resources", label: "Resources" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -18,41 +21,45 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const closeMenu = () => setOpen(false);
-
   return (
     <header
       className={clsx(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled ? "glass shadow-soft py-3" : "bg-transparent py-5",
+        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        scrolled
+          ? "border-b border-border/80 bg-white/90 backdrop-blur-md shadow-sm"
+          : "bg-transparent",
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 lg:px-8">
-        <Link to="/" className="group flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary ring-1 ring-primary/30">
+      <Container className="flex h-16 items-center justify-between lg:h-[4.5rem]">
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white">
             A
           </span>
-          <span className="text-lg font-semibold tracking-tight text-white group-hover:text-accent transition-colors">
-            AASANI
-          </span>
+          <div className="leading-tight">
+            <span className="block text-base font-semibold tracking-tight text-ink">
+              AASANI
+            </span>
+            <span className="hidden text-[11px] font-medium text-muted sm:block">
+              Healthcare Intelligence. Connected.
+            </span>
+          </div>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-7 xl:flex">
           {links.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
-              end={to === "/"}
               className={({ isActive }) =>
                 clsx(
                   "text-sm font-medium transition-colors",
-                  isActive ? "text-white" : "text-muted hover:text-white",
+                  isActive ? "text-primary" : "text-muted hover:text-ink",
                 )
               }
             >
@@ -61,21 +68,24 @@ export function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
-          <Button to="/simulation" variant="primary" className="!py-2.5 !px-5 text-sm">
-            Start Project
+        <div className="hidden items-center gap-3 md:flex">
+          <Button to="/contact" variant="secondary" className="!py-2.5 !px-4">
+            Request Demo
+          </Button>
+          <Button to="/experience" className="!py-2.5 !px-4">
+            Experience AASANI
           </Button>
         </div>
 
         <button
           type="button"
-          className="md:hidden rounded-lg p-2 text-muted hover:text-white"
+          className="rounded-lg p-2 text-muted xl:hidden"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label="Menu"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
-      </div>
+      </Container>
 
       <AnimatePresence>
         {open && (
@@ -83,29 +93,23 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="glass border-t border-border md:hidden"
+            className="border-t border-border bg-white xl:hidden"
           >
-            <div className="flex flex-col gap-1 px-6 py-4">
+            <Container className="flex flex-col gap-1 py-4">
               {links.map(({ to, label }) => (
                 <NavLink
                   key={to}
                   to={to}
-                  end={to === "/"}
-                  onClick={closeMenu}
-                  className={({ isActive }) =>
-                    clsx(
-                      "rounded-lg px-3 py-2.5 text-sm font-medium",
-                      isActive ? "bg-card text-white" : "text-muted",
-                    )
-                  }
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-muted"
                 >
                   {label}
                 </NavLink>
               ))}
-              <Button to="/simulation" className="mt-2 w-full" onClick={closeMenu}>
-                Start Project
+              <Button to="/experience" className="mt-2" onClick={() => setOpen(false)}>
+                Experience AASANI
               </Button>
-            </div>
+            </Container>
           </motion.div>
         )}
       </AnimatePresence>

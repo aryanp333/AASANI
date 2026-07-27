@@ -1,16 +1,14 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import clsx from "clsx";
 
-const base =
-  "relative inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors overflow-hidden";
-
-const variants = {
+const styles = {
   primary:
-    "bg-primary text-bg px-6 py-3 hover:bg-accent shadow-glow",
+    "bg-primary text-white shadow-[0_8px_30px_rgba(37,99,235,0.25)] hover:bg-blue-600",
   secondary:
-    "border border-border bg-card/50 text-white px-6 py-3 hover:border-primary/50 hover:bg-card",
-  ghost: "text-muted hover:text-white px-4 py-2",
+    "bg-white text-ink border border-border hover:border-primary/30 hover:shadow-md",
+  ghost: "text-muted hover:text-ink",
+  dark: "bg-white/10 text-white border border-white/20 hover:bg-white/15",
 };
 
 export function Button({
@@ -23,53 +21,35 @@ export function Button({
   type = "button",
   ...props
 }) {
-  const classes = clsx(base, variants[variant], className);
+  const classes = clsx(
+    "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all",
+    styles[variant],
+    className,
+  );
 
-  const content = (
-    <>
-      <motion.span
-        className="absolute inset-0 bg-white/10 opacity-0"
-        whileTap={{ opacity: 1, scale: 2 }}
-        transition={{ duration: 0.4 }}
-      />
-      <span className="relative z-10">{children}</span>
-    </>
+  const inner = (
+    <motion.span whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }} className="inline-flex items-center gap-2">
+      {children}
+    </motion.span>
   );
 
   if (to) {
     return (
-      <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
-        <Link to={to} className={classes} onClick={onClick} {...props}>
-          {content}
-        </Link>
-      </motion.div>
+      <Link to={to} className={classes} onClick={onClick} {...props}>
+        {inner}
+      </Link>
     );
   }
-
   if (href) {
     return (
-      <motion.a
-        href={href}
-        className={classes}
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        {...props}
-      >
-        {content}
-      </motion.a>
+      <a href={href} className={classes} {...props}>
+        {inner}
+      </a>
     );
   }
-
   return (
-    <motion.button
-      type={type}
-      className={classes}
-      onClick={onClick}
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      {...props}
-    >
-      {content}
-    </motion.button>
+    <button type={type} className={classes} onClick={onClick} {...props}>
+      {inner}
+    </button>
   );
 }
