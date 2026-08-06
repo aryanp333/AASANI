@@ -15,6 +15,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +36,25 @@ jobs:
 
       - name: SPA fallback for client-side routes
         run: cp dist/index.html dist/404.html
+
+      - name: Publish build to repository root
+        run: |
+          rm -rf assets
+          cp -r dist/assets assets
+          cp dist/index.html index.html
+          cp dist/404.html 404.html
+          cp dist/favicon.svg favicon.svg
+          cp dist/icons.svg icons.svg
+          cp dist/.nojekyll .nojekyll
+
+      - name: Commit published site to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html 404.html assets favicon.svg icons.svg .nojekyll
+          git diff --staged --quiet && echo "No changes to publish" && exit 0
+          git commit -m "Publish GitHub Pages build [skip ci]"
+          git push
 
       - name: Deploy to gh-pages branch
         uses: JamesIves/github-pages-deploy-action@v4
