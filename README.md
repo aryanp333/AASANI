@@ -64,15 +64,13 @@ npm run lint    # ESLint
 
 ### GitHub Pages
 
-1. Push to `main` — the workflow builds and publishes `dist/` to the **`gh-pages`** branch.
-2. In the repo go to **Settings → Pages → Build and deployment**.
-3. Set **Source** to **Deploy from a branch**.
-4. Set **Branch** to **`gh-pages`** and folder **`/ (root)`**.
-5. Save. After the workflow finishes (1–2 min), open:
+Pushes to `main` build the site and deploy via GitHub Actions.
 
-**https://aryanp333.github.io/AASANI/**
+1. Open **Settings → Pages → Build and deployment**.
+2. Set **Source** to **GitHub Actions** (not “Deploy from a branch”).
+3. After each push, wait for the **Deploy GitHub Pages** workflow to finish.
 
-> **Important:** If Source is set to the **`main`** branch, GitHub serves the raw source files (including `/src/main.jsx`) and the site will show a blank page. It must use **`gh-pages`**, not `main`.
+**Live URL:** [https://aryanp333.github.io/AASANI/](https://aryanp333.github.io/AASANI/)
 
 ### Vercel
 

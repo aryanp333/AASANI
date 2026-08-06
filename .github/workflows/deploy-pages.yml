@@ -6,16 +6,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,29 +38,18 @@ jobs:
       - name: SPA fallback for client-side routes
         run: cp dist/index.html dist/404.html
 
-      - name: Publish build to repository root
-        run: |
-          rm -rf assets
-          cp -r dist/assets assets
-          cp dist/index.html index.html
-          cp dist/404.html 404.html
-          cp dist/favicon.svg favicon.svg
-          cp dist/icons.svg icons.svg
-          cp dist/.nojekyll .nojekyll
-
-      - name: Commit published site to main
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html 404.html assets favicon.svg icons.svg .nojekyll
-          git diff --staged --quiet && echo "No changes to publish" && exit 0
-          git commit -m "Publish GitHub Pages build [skip ci]"
-          git push
-
-      - name: Deploy to gh-pages branch
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: dist
-          branch: gh-pages
-          clean: true
-          single-commit: true
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
