@@ -72,6 +72,8 @@ Pushes to `main` build the site and deploy via GitHub Actions.
 
 **Live URL:** [https://aryanp333.github.io/AASANI/](https://aryanp333.github.io/AASANI/)
 
+> If you see a blank page, confirm **Settings → Pages → Source** is set to **GitHub Actions**, then wait for the **Deploy GitHub Pages** workflow to complete after each push.
+
 ### Vercel
 
 Import the repo, preset **Vite**, build `npm run build`, output `dist`.
