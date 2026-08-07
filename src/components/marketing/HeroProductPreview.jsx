@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { TrendingUp, AlertTriangle, Database } from "lucide-react";
+import { TrendingUp, AlertTriangle, Activity } from "lucide-react";
 
+/** Marketing visual only — healthcare executive workspace preview (never retail/BI). */
 export function HeroProductPreview() {
   return (
-    <div className="relative">
+    <div className="relative" data-testid="hero-healthcare-preview">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -16,13 +17,13 @@ export function HeroProductPreview() {
               A
             </span>
             <div>
-              <p className="text-xs font-semibold text-ink">Business Workspace</p>
-              <p className="text-[10px] text-muted">Meridian Retail · Live from warehouse</p>
+              <p className="text-xs font-semibold text-ink">Executive Workspace</p>
+              <p className="text-[10px] text-muted">Northbridge Health System · Live</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="hidden items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700 sm:inline-flex">
-              <Database className="h-3 w-3" /> 4 DBs linked
+              <Activity className="h-3 w-3" /> 7 systems
             </span>
             <span className="rounded-md bg-primary px-2 py-1 text-[10px] font-semibold text-white">
               30D
@@ -32,9 +33,9 @@ export function HeroProductPreview() {
 
         <div className="grid gap-3 p-4 sm:grid-cols-3">
           {[
-            { label: "Revenue", value: "$12.4M", delta: "+8.2%", good: true },
-            { label: "Gross Margin", value: "33.1%", delta: "+1.2 pts", good: true },
-            { label: "Churn", value: "2.8%", delta: "+0.4 pts", good: false },
+            { label: "Admissions", value: "4,218", delta: "+3.2%", good: true },
+            { label: "Operating Margin", value: "8.4%", delta: "+0.6 pts", good: true },
+            { label: "ED Wait Time", value: "142 min", delta: "+13%", good: false },
           ].map((kpi, i) => (
             <motion.div
               key={kpi.label}
@@ -63,7 +64,7 @@ export function HeroProductPreview() {
 
         <div className="grid gap-3 px-4 pb-4 sm:grid-cols-5">
           <div className="rounded-2xl border border-border p-4 sm:col-span-3">
-            <p className="text-xs font-semibold text-ink">Orders · revenue trend</p>
+            <p className="text-xs font-semibold text-ink">Admissions · revenue trend</p>
             <div className="mt-4 flex h-28 items-end gap-1.5">
               {[42, 50, 48, 58, 64, 60, 72, 70, 80, 78, 86, 92].map((h, i) => (
                 <motion.div
@@ -79,13 +80,13 @@ export function HeroProductPreview() {
           <div className="rounded-2xl border border-amber-200/80 bg-amber-50/60 p-4 sm:col-span-2">
             <div className="flex items-center gap-1.5 text-amber-700">
               <AlertTriangle className="h-3.5 w-3.5" />
-              <p className="text-[11px] font-semibold uppercase tracking-wide">Insight</p>
+              <p className="text-[11px] font-semibold uppercase tracking-wide">AI Insight</p>
             </div>
             <p className="mt-2 text-sm font-semibold leading-snug text-ink">
-              Mid-market churn rising
+              ED wait times up 13%
             </p>
             <p className="mt-2 text-[11px] leading-relaxed text-muted">
-              SLA breaches correlated with ticket spikes. Protect ~$340K ARR with faster response.
+              Mid-week volume surge — shift triage staff Tue/Wed afternoons.
             </p>
           </div>
         </div>
@@ -97,8 +98,8 @@ export function HeroProductPreview() {
         transition={{ delay: 0.7, duration: 0.5 }}
         className="card-elevated absolute -right-2 top-20 hidden rounded-2xl border border-border bg-white px-3.5 py-2.5 sm:block lg:-right-6"
       >
-        <p className="text-[10px] font-medium uppercase tracking-wide text-muted">Sources</p>
-        <p className="text-sm font-semibold text-ink">Postgres + CRM</p>
+        <p className="text-[10px] font-medium uppercase tracking-wide text-muted">Connected</p>
+        <p className="text-sm font-semibold text-ink">EHR · FHIR</p>
       </motion.div>
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -106,8 +107,8 @@ export function HeroProductPreview() {
         transition={{ delay: 0.85, duration: 0.5 }}
         className="card-elevated absolute -bottom-3 left-4 hidden rounded-2xl border border-border bg-white px-3.5 py-2.5 sm:block"
       >
-        <p className="text-[10px] font-medium uppercase tracking-wide text-muted">Sync</p>
-        <p className="text-sm font-semibold text-accent">Continuous</p>
+        <p className="text-[10px] font-medium uppercase tracking-wide text-muted">Readmissions</p>
+        <p className="text-sm font-semibold text-accent">11.2% · improving</p>
       </motion.div>
     </div>
   );

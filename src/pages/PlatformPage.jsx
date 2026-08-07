@@ -6,20 +6,20 @@ import { connectSteps } from "../data/platform";
 
 const capabilities = [
   {
-    title: "Database-native connectors",
-    body: "Secure, read-only links to Postgres, MySQL, SQL Server, Snowflake, BigQuery, MongoDB, and cloud warehouses—without disrupting production workloads.",
+    title: "Healthcare stack connectors",
+    body: "Secure links to EHR, scheduling, labs, HR, patient experience, and FHIR/HL7—without disrupting care delivery systems.",
   },
   {
-    title: "Unified business model",
-    body: "Map tables to revenue, customers, ops, and cost so every KPI is defined once and trusted company-wide.",
+    title: "Unified clinical–operational model",
+    body: "Map events to admissions, quality, workforce, and margin so every KPI means the same thing across the system.",
   },
   {
-    title: "Actionable insights",
-    body: "Every insight pairs observation, impact, recommendation, and business value—not a noisy alert feed.",
+    title: "AI actionable insights",
+    body: "Every insight pairs observation, impact, recommendation, and confidence—not a noisy alert feed.",
   },
   {
-    title: "Leadership reporting",
-    body: "Export board-ready packs for growth, finance, operations, and product—always in sync with the source databases.",
+    title: "Board-ready reporting",
+    body: "Export executive packs for ops, finance, quality, and capacity—always in sync with connected sources.",
   },
 ];
 
@@ -29,8 +29,8 @@ export function PlatformPage() {
       <Container>
         <SectionHeader
           eyebrow="Platform"
-          title="The intelligence layer on top of company data"
-          description="AASANI is the tool that integrates with the databases and systems you already run—then turns those tables into live business decisions."
+          title="The AI intelligence layer for your health system"
+          description="AASANI integrates with the clinical and operational systems you already run—and turns them into live decisions for hospital leadership."
         />
 
         <div className="mt-14 grid gap-4 md:grid-cols-3">
@@ -65,7 +65,7 @@ export function PlatformPage() {
           <ArchitectureScroll />
         </div>
         <div className="mt-16 text-center">
-          <Button to="/experience">Experience Platform</Button>
+          <Button to="/experience">Experience AASANI</Button>
         </div>
       </Container>
     </div>

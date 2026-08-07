@@ -39,10 +39,10 @@ export function MetricsSection() {
     <section ref={ref} className="bg-white py-20 lg:py-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <p className="text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-          Results that compound
+          By the numbers
         </p>
         <p className="mx-auto mt-3 max-w-xl text-center text-sm text-muted">
-          Built for companies that treat data as a growth engine—not a reporting afterthought.
+          Built for health systems that need operational truth—not vanity metrics.
         </p>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {heroMetrics.map((m, i) => (

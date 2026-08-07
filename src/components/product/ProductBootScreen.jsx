@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Loader2, Shield, Hospital } from "lucide-react";
 import { useProductBoot } from "../../hooks/useProductBoot";
@@ -6,6 +6,13 @@ import { bootSystems } from "../../data/workspaceMock";
 
 export function ProductBootScreen({ onComplete }) {
   const { phase, connected, isReady } = useProductBoot(true);
+  const onCompleteRef = useRef(onComplete);
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
   const progress =
     phase === "ready"
       ? 100
@@ -14,13 +21,19 @@ export function ProductBootScreen({ onComplete }) {
         : Math.round((connected.length / Math.max(bootSystems.length, 1)) * 78);
 
   useEffect(() => {
-    if (!isReady || !onComplete) return;
-    const t = setTimeout(onComplete, 900);
+    if (!isReady || firedRef.current) return;
+    firedRef.current = true;
+    const t = setTimeout(() => {
+      onCompleteRef.current?.();
+    }, 900);
     return () => clearTimeout(t);
-  }, [isReady, onComplete]);
+  }, [isReady]);
 
   return (
-    <div className="mesh-dark noise relative flex min-h-screen flex-col items-center justify-center px-6 text-white">
+    <div
+      className="mesh-dark noise relative flex min-h-screen flex-col items-center justify-center px-6 text-white"
+      data-testid="product-boot-screen"
+    >
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -52,7 +65,7 @@ export function ProductBootScreen({ onComplete }) {
         </div>
         <p className="mt-2 text-center text-xs text-slate-500">{progress}% complete</p>
 
-        <ul className="mt-8 space-y-2.5">
+        <ul className="mt-8 space-y-2.5" data-testid="boot-systems-list">
           {connected.map((name) => (
             <motion.li
               key={name}

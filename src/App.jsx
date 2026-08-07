@@ -13,9 +13,16 @@ import { ResourcesPage } from "./pages/ResourcesPage";
 import { ContactPage } from "./pages/ContactPage";
 import { ExperiencePage } from "./pages/ExperiencePage";
 
+/**
+ * Only one experience route. Marketing pages never embed ExecutiveWorkspace
+ * or retail dashboard templates.
+ */
 function App() {
   const location = useLocation();
-  const isExperience = location.pathname === "/experience";
+  const isExperience =
+    location.pathname === "/experience" ||
+    location.pathname === "/simulation" ||
+    location.pathname === "/dashboard";
 
   return (
     <div className="min-h-screen bg-surface text-ink">
@@ -23,18 +30,76 @@ function App() {
       <main>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
-            <Route path="/platform" element={<PageTransition><PlatformPage /></PageTransition>} />
-            <Route path="/solutions" element={<PageTransition><SolutionsPage /></PageTransition>} />
-            <Route path="/integrations" element={<PageTransition><IntegrationsPage /></PageTransition>} />
-            <Route path="/security" element={<PageTransition><SecurityPage /></PageTransition>} />
-            <Route path="/pricing" element={<PageTransition><PricingPage /></PageTransition>} />
-            <Route path="/resources" element={<PageTransition><ResourcesPage /></PageTransition>} />
-            <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+            <Route
+              path="/"
+              element={
+                <PageTransition>
+                  <HomePage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/platform"
+              element={
+                <PageTransition>
+                  <PlatformPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/solutions"
+              element={
+                <PageTransition>
+                  <SolutionsPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/integrations"
+              element={
+                <PageTransition>
+                  <IntegrationsPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/security"
+              element={
+                <PageTransition>
+                  <SecurityPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/pricing"
+              element={
+                <PageTransition>
+                  <PricingPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/resources"
+              element={
+                <PageTransition>
+                  <ResourcesPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageTransition>
+                  <ContactPage />
+                </PageTransition>
+              }
+            />
+            {/* Canonical experience — sole mount of ProductBoot → ExecutiveWorkspace */}
             <Route path="/experience" element={<ExperiencePage />} />
             <Route path="/simulation" element={<Navigate to="/experience" replace />} />
             <Route path="/dashboard" element={<Navigate to="/experience" replace />} />
             <Route path="/about" element={<Navigate to="/platform" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
       </main>

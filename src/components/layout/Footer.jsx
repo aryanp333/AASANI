@@ -34,12 +34,12 @@ export function Footer() {
             <p className="text-lg font-bold tracking-tight">AASANI</p>
           </div>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-400">
-            AASANI integrates with company databases and business systems to deliver a
-            single intelligence workspace—so teams grow revenue, cut waste, and decide
-            with live truth.
+            AASANI is the healthcare intelligence platform that sits above your EHR and
+            operational systems—delivering AI insights, executive KPIs, and board-ready
+            reporting without rip-and-replace.
           </p>
           <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-            Your data. Connected. Actionable.
+            Healthcare Intelligence. Connected.
           </p>
         </div>
         {columns.map((col) => (

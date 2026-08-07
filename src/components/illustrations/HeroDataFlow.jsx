@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
 
+/** Healthcare stack diagram for marketing (no retail/DB nodes). */
 export function HeroDataFlow() {
   const nodes = [
-    { cx: 110, cy: 120, label: "Postgres" },
-    { cx: 690, cy: 100, label: "CRM" },
-    { cx: 700, cy: 360, label: "ERP" },
-    { cx: 100, cy: 380, label: "Billing" },
-    { cx: 400, cy: 60, label: "Snowflake" },
-    { cx: 400, cy: 460, label: "Support" },
+    { cx: 110, cy: 120, label: "EHR" },
+    { cx: 690, cy: 100, label: "RCM" },
+    { cx: 700, cy: 360, label: "Lab" },
+    { cx: 100, cy: 380, label: "HR" },
+    { cx: 400, cy: 60, label: "Schedule" },
+    { cx: 400, cy: 460, label: "PE" },
   ];
 
   return (
@@ -64,9 +65,9 @@ export function HeroDataFlow() {
             }}
           />
           <rect
-            x={node.cx - 46}
+            x={node.cx - 42}
             y={node.cy - 18}
-            width={92}
+            width={84}
             height={36}
             rx={10}
             fill="#fff"

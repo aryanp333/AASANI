@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Database,
+  Hospital,
   Unplug,
   LayoutGrid,
   Copy,
@@ -16,37 +16,65 @@ import { Container, SectionHeader } from "../components/layout/Container";
 import { HeroProductPreview } from "../components/marketing/HeroProductPreview";
 import { MetricsSection } from "../components/marketing/MetricsSection";
 import { ArchitectureScroll } from "../components/marketing/ArchitectureScroll";
-import {
-  trustedOrganizations,
-  problemPoints,
-  connectSteps,
-} from "../data/platform";
+import { howItWorksSteps } from "../data/workspaceMock";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+
+const trustedOrgs = [
+  "Northbridge Health System",
+  "Summit Care Network",
+  "Meridian Medical Group",
+  "Coastal Regional",
+  "Atlas Health Partners",
+  "Pioneer Clinical",
+];
+
+const problemPoints = [
+  {
+    title: "Disconnected clinical systems",
+    description:
+      "EHR, scheduling, labs, HR, and revenue each tell a different story—with no single view for leadership.",
+  },
+  {
+    title: "Competing dashboards",
+    description:
+      "Ops, finance, and quality rebuild the same reports from different extracts every month.",
+  },
+  {
+    title: "Slow, manual reporting",
+    description:
+      "Board packs lag reality by weeks while capacity and quality risks compound.",
+  },
+  {
+    title: "No AI layer on the stack you run",
+    description:
+      "You already invested in core systems. What’s missing is an intelligence layer that ties them together.",
+  },
+];
 
 const problemIcons = [Unplug, LayoutGrid, Copy, Table2];
 
 const outcomes = [
   {
-    title: "One source of truth",
-    body: "Sales, finance, and ops finally share the same numbers—live from company databases, not competing exports.",
+    title: "One source of operational truth",
+    body: "Clinical, financial, and workforce metrics aligned from the systems you already run.",
   },
   {
-    title: "Decisions in hours, not weeks",
-    body: "Insights explain what changed, why it matters, and what to do next—ready for leadership standups.",
+    title: "AI-ranked actions",
+    body: "Insights with confidence, impact, and recommended next steps for COOs and quality leads.",
   },
   {
-    title: "Plug into systems you already run",
-    body: "No rip-and-replace. AASANI connects to your databases and tools, then becomes the intelligence layer above them.",
+    title: "No rip-and-replace",
+    body: "AASANI connects via FHIR, HL7, and secure interfaces—above your EHR, not instead of it.",
   },
 ];
 
 const story = [
-  "Scattered databases",
-  "Fragmented metrics",
-  "Slow reporting",
+  "Disconnected systems",
+  "Fragmented visibility",
+  "Leadership blind spots",
   "AASANI connects",
-  "Live intelligence",
-  "Better business outcomes",
+  "Real-time intelligence",
+  "Better patient outcomes",
 ];
 
 export function HomePage() {
@@ -63,37 +91,34 @@ export function HomePage() {
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-3.5 py-1.5 text-xs font-semibold text-primary shadow-sm backdrop-blur">
-              <Database className="h-3.5 w-3.5" />
-              Business intelligence · Connected to your databases
+              <Hospital className="h-3.5 w-3.5" />
+              Healthcare intelligence platform
             </div>
             <h1 className="mt-7 text-[2.5rem] font-bold tracking-tight text-ink sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
-              Your databases.
+              One platform.
               <br />
-              <span className="gradient-text">One growth workspace.</span>
+              <span className="gradient-text">Every healthcare decision.</span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">
-              AASANI plugs into company databases and business systems so leaders
-              see revenue, operations, and customers in one live platform—and act
-              before the opportunity disappears.
+              Connect your existing hospital stack—EHR, revenue cycle, scheduling, labs, HR, and
+              FHIR—and give leaders a live executive workspace with AI-driven operational insight.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
               <Button to="/contact">Request Demo</Button>
-              <Button to="/experience" variant="secondary">
-                Try the platform
+              <Button to="/experience" variant="secondary" data-testid="cta-experience">
+                Experience AASANI
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted">
-              {[
-                "Read-only DB connectors",
-                "Works with Postgres & Snowflake",
-                "Board-ready reports",
-              ].map((item) => (
-                <span key={item} className="inline-flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-accent" />
-                  {item}
-                </span>
-              ))}
+              {["HIPAA-ready architecture", "Works with your EHR", "Board-ready AI reports"].map(
+                (item) => (
+                  <span key={item} className="inline-flex items-center gap-1.5">
+                    <CheckCircle2 className="h-4 w-4 text-accent" />
+                    {item}
+                  </span>
+                ),
+              )}
             </div>
           </motion.div>
 
@@ -103,13 +128,13 @@ export function HomePage() {
 
       <section className="overflow-hidden border-y border-border bg-white py-10">
         <p className="mb-6 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
-          Built for modern operators
+          Trusted by healthcare organisations
         </p>
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent" />
           <div className="marquee gap-12 px-6">
-            {[...trustedOrganizations, ...trustedOrganizations].map((name, i) => (
+            {[...trustedOrgs, ...trustedOrgs].map((name, i) => (
               <span
                 key={`${name}-${i}`}
                 className="shrink-0 text-sm font-semibold tracking-tight text-slate-400"
@@ -126,11 +151,11 @@ export function HomePage() {
           <SectionHeader
             align="center"
             eyebrow="How it works"
-            title="From database connection to business clarity"
-            description="Three steps. No multi-year BI rebuild. AASANI becomes the layer that turns stored data into decisions."
+            title="From hospital systems to executive intelligence"
+            description="Three steps. No multi-year data rebuild. AASANI becomes the AI layer above the stack you already run."
           />
           <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {connectSteps.map((item, i) => {
+            {howItWorksSteps.map((item, i) => {
               const icons = [Server, Link2, LineChart];
               const Icon = icons[i];
               return (
@@ -166,7 +191,7 @@ export function HomePage() {
           <SectionHeader
             align="center"
             eyebrow="The story"
-            title="From chaos in the warehouse to decisions at the board table"
+            title="From fragmentation to decision-ready intelligence"
           />
           <div className="mt-12 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {story.map((step, i) => (
@@ -202,8 +227,8 @@ export function HomePage() {
         <Container>
           <SectionHeader
             eyebrow="The problem"
-            title="Your business already has the data—it's just locked away"
-            description="CRMs, ERPs, product DBs, billing, and warehouses each hold part of the truth. AASANI unifies them for every leader who needs to grow the company."
+            title="Healthcare already has the data—it’s locked in silos"
+            description="Leaders inherit dozens of systems but no single place to see performance, compare departments, or act with confidence."
           />
           <div className="mt-16 grid gap-5 md:grid-cols-2">
             {problemPoints.map((point, i) => {
@@ -237,13 +262,12 @@ export function HomePage() {
               The shift
             </p>
             <h3 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-              Connect once.
-              <br className="hidden sm:block" /> Grow with every query.
+              One connected platform.
+              <br className="hidden sm:block" /> Real-time clinical & operational intelligence.
             </h3>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-300">
-              AASANI sits above your stacks—pulling live signals from the databases that
-              already power the business, then delivering one workspace your entire
-              leadership team can trust.
+              AASANI sits above your existing systems—unifying data, benchmarking departments, and
+              delivering AI insights executives can trust.
             </p>
             <div className="mt-8 flex justify-center">
               <Button to="/platform" variant="dark">
@@ -259,8 +283,8 @@ export function HomePage() {
         <Container>
           <SectionHeader
             eyebrow="Platform architecture"
-            title="Databases in. Decisions out."
-            description="Secure connectors, a unified business model, and an executive workspace—without rebuilding your data estate."
+            title="From hospital systems to executive intelligence"
+            description="AASANI does not replace your EHR or revenue cycle. It is the intelligence layer that connects them."
             align="center"
           />
           <div className="mt-16">
@@ -273,8 +297,8 @@ export function HomePage() {
         <Container>
           <SectionHeader
             eyebrow="Outcomes"
-            title="What companies gain with AASANI"
-            description="Built for founders, COOs, CFOs, and data teams who need growth clarity—not another disconnected dashboard."
+            title="What health system leaders gain"
+            description="Built for CIOs, COOs, CFOs, and quality leaders who need shared operational visibility."
             align="center"
           />
           <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -304,12 +328,12 @@ export function HomePage() {
             <SectionHeader
               align="center"
               eyebrow="Experience AASANI"
-              title="Watch your stack come online"
-              description="Simulate connecting company databases, syncing live metrics, and opening a full business intelligence workspace."
+              title="See the executive workspace in action"
+              description="Connect healthcare systems, then open a full hospital executive workspace—KPIs, AI insights, and board reports."
             />
             <div className="relative mt-10 flex flex-wrap justify-center gap-3">
-              <Button to="/experience">
-                Launch experience
+              <Button to="/experience" data-testid="cta-experience-bottom">
+                Experience AASANI
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <Button to="/contact" variant="secondary">

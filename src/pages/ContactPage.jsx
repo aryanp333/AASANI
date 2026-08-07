@@ -31,19 +31,19 @@ export function ContactPage() {
               <>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Full name" placeholder="Alex Morgan" />
-                  <Field label="Company" placeholder="Meridian Retail" />
+                  <Field label="Organisation" placeholder="Northbridge Health System" />
                 </div>
-                <Field label="Work email" type="email" placeholder="alex@company.com" />
-                <Field label="Role" placeholder="COO / Head of Data / CFO" />
+                <Field label="Work email" type="email" placeholder="you@healthsystem.org" />
+                <Field label="Role" placeholder="COO / CIO / Chief Quality Officer" />
                 <label className="block">
                   <span className="text-sm font-medium text-muted">
-                    Databases & systems to connect
+                    Systems to connect
                   </span>
                   <textarea
                     required
                     rows={4}
                     className="mt-2 w-full rounded-xl border border-border px-4 py-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    placeholder="e.g. Postgres + Snowflake + Salesforce + Stripe…"
+                    placeholder="e.g. Epic EHR, Cerner, scheduling, labs, FHIR feeds…"
                   />
                 </label>
                 <Button type="submit">

@@ -7,6 +7,7 @@
     "dev": "cp index.dev.html index.html && vite",
     "build": "cp index.dev.html index.html && vite build",
     "lint": "eslint .",
+    "test:experience": "node scripts/experience-flow.check.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
