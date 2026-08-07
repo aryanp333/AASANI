@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { bootSystems } from "../data/platform";
+import { bootSystems } from "../data/workspaceMock";
 
 export function useProductBoot(autoStart = true) {
   const [phase, setPhase] = useState(autoStart ? "connecting" : "idle");
@@ -13,20 +13,37 @@ export function useProductBoot(autoStart = true) {
   useEffect(() => {
     if (phase !== "connecting") return;
 
-    let i = 0;
+    // Always append by previous length to avoid empty/stray rows from stale index
+    // (classic setInterval + functional setState race).
     const interval = setInterval(() => {
-      if (i < bootSystems.length) {
-        setConnected((prev) => [...prev, bootSystems[i]]);
-        i += 1;
-      } else {
-        clearInterval(interval);
-        setTimeout(() => setPhase("sync"), 400);
-        setTimeout(() => setPhase("ready"), 2200);
-      }
+      setConnected((prev) => {
+        if (prev.length >= bootSystems.length) {
+          return prev;
+        }
+        const next = bootSystems[prev.length];
+        if (!next) return prev;
+        return [...prev, next];
+      });
     }, 450);
 
     return () => clearInterval(interval);
   }, [phase]);
 
-  return { phase, connected, start, isReady: phase === "ready" };
+  useEffect(() => {
+    if (phase !== "connecting") return;
+    if (connected.length < bootSystems.length) return;
+    const t1 = setTimeout(() => setPhase("sync"), 400);
+    const t2 = setTimeout(() => setPhase("ready"), 2200);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [connected.length, phase]);
+
+  return {
+    phase,
+    connected: connected.filter(Boolean),
+    start,
+    isReady: phase === "ready",
+  };
 }

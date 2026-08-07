@@ -8,12 +8,12 @@ export function ContactPage() {
   const [sent, setSent] = useState(false);
 
   return (
-    <div className="pt-28 pb-24">
+    <div className="mesh-light pt-28 pb-24">
       <Container>
         <SectionHeader
           eyebrow="Contact"
-          title="Partner with AASANI"
-          description="Request a demo or book a consultation with our healthcare intelligence team. We respond within one business day."
+          title="Connect your stack with AASANI"
+          description="Request a demo or book a technical walkthrough. Tell us which databases and business systems you run—we'll map a live pilot."
         />
         <div className="mt-16 grid gap-12 lg:grid-cols-5">
           <motion.form
@@ -25,23 +25,25 @@ export function ContactPage() {
           >
             {sent ? (
               <p className="py-12 text-center text-ink">
-                Thank you. A member of our team will contact you shortly.
+                Thank you. A specialist will reach out within one business day.
               </p>
             ) : (
               <>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <Field label="Full name" placeholder="Jordan Lee" />
-                  <Field label="Organisation" placeholder="Northbridge Health" />
+                  <Field label="Full name" placeholder="Alex Morgan" />
+                  <Field label="Company" placeholder="Meridian Retail" />
                 </div>
-                <Field label="Work email" type="email" placeholder="jordan.lee@health.org" />
-                <Field label="Role" placeholder="Chief Operating Officer" />
+                <Field label="Work email" type="email" placeholder="alex@company.com" />
+                <Field label="Role" placeholder="COO / Head of Data / CFO" />
                 <label className="block">
-                  <span className="text-sm font-medium text-muted">How can we help?</span>
+                  <span className="text-sm font-medium text-muted">
+                    Databases & systems to connect
+                  </span>
                   <textarea
                     required
                     rows={4}
                     className="mt-2 w-full rounded-xl border border-border px-4 py-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                    placeholder="Describe your systems, priorities, and timeline…"
+                    placeholder="e.g. Postgres + Snowflake + Salesforce + Stripe…"
                   />
                 </label>
                 <Button type="submit">
@@ -52,13 +54,13 @@ export function ContactPage() {
           </motion.form>
           <aside className="space-y-6 lg:col-span-2">
             <div className="card-elevated rounded-2xl border border-border bg-surface-muted p-8">
-              <h3 className="font-semibold text-ink">Enterprise sales</h3>
+              <h3 className="font-semibold text-ink">Sales</h3>
               <p className="mt-2 text-sm text-muted">hello@aasani.com</p>
             </div>
             <div className="card-elevated rounded-2xl border border-border bg-white p-8">
-              <h3 className="font-semibold text-ink">Executive consultation</h3>
+              <h3 className="font-semibold text-ink">Integration consult</h3>
               <p className="mt-2 text-sm text-muted">
-                A 45-minute session to map your data estate and executive KPIs.
+                45 minutes to review your databases, KPIs, and path to a live workspace.
               </p>
               <Button
                 href="mailto:hello@aasani.com?subject=Book%20Consultation"

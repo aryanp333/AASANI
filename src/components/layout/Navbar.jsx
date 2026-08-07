@@ -32,59 +32,74 @@ export function Navbar() {
       className={clsx(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-border/80 bg-white/90 backdrop-blur-md shadow-sm"
+          ? "border-b border-border/80 bg-white/85 shadow-[0_8px_30px_rgba(15,23,42,0.04)] backdrop-blur-xl"
           : "bg-transparent",
       )}
     >
-      <Container className="flex h-16 items-center justify-between lg:h-[4.5rem]">
-        <Link to="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white">
+      <Container className="flex h-[4.25rem] items-center gap-6 lg:h-[4.75rem] lg:gap-8 xl:gap-10">
+        <Link to="/" className="flex shrink-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-[#1d4ed8] text-sm font-bold text-white shadow-[0_6px_16px_rgba(37,99,235,0.35)]">
             A
           </span>
           <div className="leading-tight">
-            <span className="block text-base font-semibold tracking-tight text-ink">
+            <span className="block text-[15px] font-bold tracking-tight text-ink">
               AASANI
             </span>
-            <span className="hidden text-[11px] font-medium text-muted sm:block">
-              Healthcare Intelligence. Connected.
+            <span className="hidden text-[10px] font-medium tracking-wide text-muted sm:block">
+              Healthcare Intelligence
             </span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-7 xl:flex">
-          {links.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                clsx(
-                  "text-sm font-medium transition-colors",
-                  isActive ? "text-primary" : "text-muted hover:text-ink",
-                )
-              }
+        {/* Nav + CTAs as a right cluster with explicit gap */}
+        <div className="ml-auto flex min-w-0 items-center gap-6 lg:gap-8 xl:gap-10">
+          <nav className="hidden items-center gap-1 lg:gap-2 xl:flex">
+            {links.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  clsx(
+                    "rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors whitespace-nowrap xl:px-3",
+                    isActive
+                      ? "bg-primary/8 text-primary"
+                      : "text-muted hover:bg-surface-muted hover:text-ink",
+                  )
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Visual separator before buttons (xl+) */}
+          <div
+            className="hidden h-6 w-px shrink-0 bg-border xl:block"
+            aria-hidden
+          />
+
+          <div className="hidden shrink-0 items-center gap-3 md:flex">
+            <Button
+              to="/contact"
+              variant="secondary"
+              className="!px-4 !py-2.5 !text-[13px]"
             >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
+              Request Demo
+            </Button>
+            <Button to="/experience" className="!px-4 !py-2.5 !text-[13px]">
+              Experience AASANI
+            </Button>
+          </div>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <Button to="/contact" variant="secondary" className="!py-2.5 !px-4">
-            Request Demo
-          </Button>
-          <Button to="/experience" className="!py-2.5 !px-4">
-            Experience AASANI
-          </Button>
+          <button
+            type="button"
+            className="rounded-xl p-2 text-muted transition hover:bg-surface-muted hover:text-ink xl:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="rounded-lg p-2 text-muted xl:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Menu"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
       </Container>
 
       <AnimatePresence>
@@ -101,14 +116,23 @@ export function Navbar() {
                   key={to}
                   to={to}
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-muted"
+                  className="rounded-xl px-3 py-2.5 text-sm font-medium text-muted hover:bg-surface-muted"
                 >
                   {label}
                 </NavLink>
               ))}
-              <Button to="/experience" className="mt-2" onClick={() => setOpen(false)}>
-                Experience AASANI
-              </Button>
+              <div className="mt-3 grid gap-2">
+                <Button
+                  to="/contact"
+                  variant="secondary"
+                  onClick={() => setOpen(false)}
+                >
+                  Request Demo
+                </Button>
+                <Button to="/experience" onClick={() => setOpen(false)}>
+                  Experience AASANI
+                </Button>
+              </div>
             </Container>
           </motion.div>
         )}

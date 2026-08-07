@@ -11,8 +11,8 @@ export function PricingPage() {
       <Container>
         <SectionHeader
           eyebrow="Pricing"
-          title="Enterprise programs for health systems"
-          description="Transparent partnership models—scoped to your integration complexity, user footprint, and governance requirements."
+          title="Plans for teams that run on data"
+          description="Scoped to connectors, seats, and how deep your database estate runs—not consumer seat caps that break at scale."
           align="center"
         />
         <div className="mt-16 grid gap-8 lg:grid-cols-3">
@@ -21,7 +21,7 @@ export function PricingPage() {
               key={tier.name}
               whileHover={{ y: -4 }}
               className={clsx(
-                "flex flex-col rounded-2xl border p-8 card-elevated",
+                "card-elevated flex flex-col rounded-2xl border p-8",
                 tier.featured
                   ? "border-primary bg-white ring-2 ring-primary/20"
                   : "border-border bg-white",

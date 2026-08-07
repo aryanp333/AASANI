@@ -9,8 +9,8 @@ export function SolutionsPage() {
       <Container>
         <SectionHeader
           eyebrow="Solutions"
-          title="Intelligence for every leadership conversation"
-          description="Whether you lead operations, finance, or clinical quality—AASANI connects your metrics to the systems that produce them."
+          title="Intelligence for every growth conversation"
+          description="Whether you lead sales, ops, finance, or customer success—AASANI connects metrics back to the databases that produce them."
         />
         <div className="mt-16 space-y-6">
           {solutions.map((s, i) => (
@@ -19,10 +19,10 @@ export function SolutionsPage() {
               initial={{ opacity: 0, x: i % 2 === 0 ? -16 : 16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="grid gap-8 rounded-2xl border border-border bg-white p-10 lg:grid-cols-[1fr_2fr] card-elevated"
+              className="card-elevated grid gap-8 rounded-2xl border border-border bg-white p-10 lg:grid-cols-[1fr_2fr]"
             >
               <h3 className="text-2xl font-bold text-ink">{s.title}</h3>
-              <p className="text-muted leading-relaxed">{s.description}</p>
+              <p className="leading-relaxed text-muted">{s.description}</p>
             </motion.div>
           ))}
         </div>

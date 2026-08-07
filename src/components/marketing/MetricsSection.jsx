@@ -3,7 +3,7 @@ import { useScrollReveal } from "../../hooks/useScrollReveal";
 import { useAnimatedCounter } from "../../hooks/useAnimatedCounter";
 import { heroMetrics } from "../../data/platform";
 
-function MetricItem({ metric, active }) {
+function MetricItem({ metric, active, index }) {
   const count = useAnimatedCounter(metric.value, 1800, active);
 
   let headline = String(count);
@@ -12,12 +12,20 @@ function MetricItem({ metric, active }) {
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      className="card-elevated rounded-2xl border border-border bg-white p-8"
+      initial={{ opacity: 0, y: 16 }}
+      animate={active ? { opacity: 1, y: 0 } : {}}
+      transition={{ delay: index * 0.08 }}
+      whileHover={{ y: -5 }}
+      className="card-elevated rounded-2xl border border-border bg-white p-7"
     >
-      <p className="text-4xl font-bold tracking-tight text-ink lg:text-5xl">{headline}</p>
+      <p className="bg-gradient-to-br from-ink to-primary bg-clip-text text-4xl font-bold tracking-tight text-transparent lg:text-5xl">
+        {headline}
+      </p>
       {metric.suffix !== "+" && metric.suffix !== "% satisfaction" && (
-        <p className="mt-1 text-sm font-medium text-accent">{metric.suffix}</p>
+        <p className="mt-1.5 text-sm font-semibold text-accent">{metric.suffix}</p>
+      )}
+      {metric.suffix === "% satisfaction" && (
+        <p className="mt-1.5 text-sm font-semibold text-accent">executive satisfaction</p>
       )}
       <p className="mt-3 text-sm leading-relaxed text-muted">{metric.label}</p>
     </motion.div>
@@ -28,11 +36,19 @@ export function MetricsSection() {
   const { ref, visible } = useScrollReveal(0.15);
 
   return (
-    <section ref={ref} className="bg-surface-muted py-24 lg:py-32">
-      <div className="mx-auto grid max-w-6xl gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-        {heroMetrics.map((m) => (
-          <MetricItem key={m.label} metric={m} active={visible} />
-        ))}
+    <section ref={ref} className="bg-white py-20 lg:py-24">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <p className="text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+          Results that compound
+        </p>
+        <p className="mx-auto mt-3 max-w-xl text-center text-sm text-muted">
+          Built for companies that treat data as a growth engine—not a reporting afterthought.
+        </p>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {heroMetrics.map((m, i) => (
+            <MetricItem key={m.label} metric={m} active={visible} index={i} />
+          ))}
+        </div>
       </div>
     </section>
   );

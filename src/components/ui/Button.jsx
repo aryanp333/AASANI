@@ -4,11 +4,11 @@ import clsx from "clsx";
 
 const styles = {
   primary:
-    "bg-primary text-white shadow-[0_8px_30px_rgba(37,99,235,0.25)] hover:bg-blue-600",
+    "bg-primary text-white shadow-[0_10px_30px_rgba(37,99,235,0.28)] hover:bg-[#1d4ed8] hover:shadow-[0_14px_36px_rgba(37,99,235,0.32)]",
   secondary:
-    "bg-white text-ink border border-border hover:border-primary/30 hover:shadow-md",
+    "bg-white text-ink border border-border hover:border-primary/35 hover:bg-surface-muted hover:shadow-md",
   ghost: "text-muted hover:text-ink",
-  dark: "bg-white/10 text-white border border-white/20 hover:bg-white/15",
+  dark: "bg-white/10 text-white border border-white/20 hover:bg-white/16",
 };
 
 export function Button({
@@ -22,13 +22,17 @@ export function Button({
   ...props
 }) {
   const classes = clsx(
-    "inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all",
+    "inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-semibold tracking-tight transition-all duration-200",
     styles[variant],
     className,
   );
 
   const inner = (
-    <motion.span whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }} className="inline-flex items-center gap-2">
+    <motion.span
+      whileHover={{ y: -1 }}
+      whileTap={{ scale: 0.985 }}
+      className="inline-flex items-center gap-2"
+    >
       {children}
     </motion.span>
   );
