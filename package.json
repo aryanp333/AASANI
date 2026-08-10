@@ -8,6 +8,8 @@
     "build": "cp index.dev.html index.html && vite build",
     "lint": "eslint .",
     "test:experience": "node scripts/experience-flow.check.mjs",
+    "test:chat": "npx vite-node scripts/chat-live-data.check.mjs",
+    "test:orgs": "npx vite-node scripts/org-multi-tenant.check.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
