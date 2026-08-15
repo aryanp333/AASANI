@@ -4,8 +4,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -20,7 +18,6 @@ import {
   MessageSquare,
   X,
   Send,
-  Building2,
   ShieldAlert,
   HeartPulse,
   Wallet,
@@ -29,17 +26,15 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import {
-  DEFAULT_ORG_ID,
   getKPIs,
   getDepartmentScorecards,
-  getTrendData,
   getInsights,
   getNarrativeSummary,
-  getOrganizations,
   getSuggestedPrompts,
   getPeriodLabel,
-  askQuestion,
+  sendChatMessage,
 } from "../../services/dataService";
+import { getStoredOrg } from "../../services/authService";
 import { useAsyncData } from "../../hooks/useAsyncData";
 
 const ranges = /** @type {const} */ (["7D", "30D", "90D"]);
@@ -202,20 +197,10 @@ function NarrativeSkeleton() {
   );
 }
 
-/** Clean dual-metric chart rows from two getTrendData results. */
-function mergeTrendSeries(admissions, revenue) {
-  return (admissions || []).map((point, i) => ({
-    period: point.date,
-    admissions: point.value,
-    revenue: revenue?.[i]?.value ?? null,
-  }));
-}
-
 export function ExecutiveWorkspace() {
   const [tab, setTab] = useState("overview");
   const [range, setRange] = useState("30D");
   const [dept, setDept] = useState("All");
-  const [orgId, setOrgId] = useState(DEFAULT_ORG_ID);
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -227,32 +212,18 @@ export function ExecutiveWorkspace() {
   const [exportNote, setExportNote] = useState("");
   const chatEndRef = useRef(null);
 
-  // Meta fetches (org list / prompts / period label) — independent of section failures
-  const orgsAsync = useAsyncData(() => getOrganizations(), []);
+  // Meta fetches (prompts / period label) — independent of section failures
   const promptsAsync = useAsyncData(() => getSuggestedPrompts(), []);
   const labelAsync = useAsyncData(() => getPeriodLabel(range), [range]);
 
-  // Independent section fetches (orgId drives multi-tenant data)
-  const kpisAsync = useAsyncData(() => getKPIs(orgId, range), [orgId, range]);
-  const scorecardsAsync = useAsyncData(() => getDepartmentScorecards(orgId, range), [
-    orgId,
-    range,
-  ]);
-  const trendsAsync = useAsyncData(async () => {
-    const [admissions, revenue] = await Promise.all([
-      getTrendData(orgId, range, "admissions"),
-      getTrendData(orgId, range, "revenue"),
-    ]);
-    return mergeTrendSeries(admissions, revenue);
-  }, [orgId, range]);
-  const insightsAsync = useAsyncData(() => getInsights(orgId, range), [orgId, range]);
-  const narrativeAsync = useAsyncData(() => getNarrativeSummary(orgId, range), [orgId, range]);
+  // Independent section fetches — org is implied by the logged-in user's token
+  const kpisAsync = useAsyncData(() => getKPIs(range), [range]);
+  const scorecardsAsync = useAsyncData(() => getDepartmentScorecards(range), [range]);
+  const insightsAsync = useAsyncData(() => getInsights(range), [range]);
+  const narrativeAsync = useAsyncData(() => getNarrativeSummary(range), [range]);
 
-  const orgs = orgsAsync.data?.length
-    ? orgsAsync.data
-    : [{ id: DEFAULT_ORG_ID, name: "Northbridge Health System", type: "", bedCount: 0 }];
-  const activeOrg = orgs.find((o) => o.id === orgId) || orgs[0];
-  const orgName = activeOrg?.name || "Northbridge Health System";
+  const activeOrg = useMemo(() => getStoredOrg(), []);
+  const orgName = activeOrg?.name || "Your Organization";
   const orgType = activeOrg?.type || "";
   const prompts = promptsAsync.data ?? [];
   const periodLabel = labelAsync.success && labelAsync.data ? labelAsync.data : range;
@@ -262,7 +233,6 @@ export function ExecutiveWorkspace() {
     () => scorecardsAsync.data ?? [],
     [scorecardsAsync.data],
   );
-  const trendChart = trendsAsync.data ?? [];
   const insights = insightsAsync.data ?? [];
   const narrative = narrativeAsync.data;
 
@@ -280,11 +250,6 @@ export function ExecutiveWorkspace() {
     setDept("All");
   }, []);
 
-  const selectOrg = useCallback((nextId) => {
-    setOrgId(nextId);
-    setDept("All");
-  }, []);
-
   const ask = useCallback(
     async (question) => {
       const q = question.trim();
@@ -293,7 +258,7 @@ export function ExecutiveWorkspace() {
       setDraft("");
       setChatOpen(true);
       try {
-        const answer = await askQuestion(q, range, orgId);
+        const answer = await sendChatMessage(q, range);
         setMessages((m) => [...m, { role: "assistant", text: answer.text }]);
       } catch {
         setMessages((m) => [
@@ -305,7 +270,7 @@ export function ExecutiveWorkspace() {
         ]);
       }
     },
-    [range, orgId],
+    [range],
   );
 
   function handleExport() {
@@ -346,25 +311,6 @@ export function ExecutiveWorkspace() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* Org switcher — multi-tenant scaffold */}
-            <div className="relative">
-              <Building2 className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
-              <select
-                value={orgId}
-                onChange={(e) => selectOrg(e.target.value)}
-                className="appearance-none rounded-lg border border-border bg-white py-1.5 pl-8 pr-8 text-xs font-semibold text-ink"
-                aria-label="Select organization"
-                data-testid="org-switcher"
-              >
-                {orgs.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.name}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
-            </div>
-
             {ranges.map((r) => (
               <button
                 key={r}
@@ -426,7 +372,7 @@ export function ExecutiveWorkspace() {
       <main className="mx-auto max-w-[1400px] px-6 py-8 lg:px-8">
         {tab === "overview" && (
           <motion.div
-            key={`overview-${range}-${orgId}`}
+            key={`overview-${range}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -471,57 +417,7 @@ export function ExecutiveWorkspace() {
               </div>
             )}
 
-            <div className="mt-8 grid gap-6 lg:grid-cols-2">
-              {/* Trends */}
-              {trendsAsync.loading && <ChartSkeleton title="Admissions & revenue" />}
-              {trendsAsync.failed && (
-                <SectionError
-                  message="Couldn't load trend data."
-                  onRetry={trendsAsync.retry}
-                  className="min-h-[320px]"
-                />
-              )}
-              {trendsAsync.success && trendChart.length === 0 && (
-                <SectionEmpty
-                  message="No data available for this period."
-                  className="min-h-[320px]"
-                />
-              )}
-              {trendsAsync.success && trendChart.length > 0 && (
-                <div className="card-elevated rounded-2xl border border-border bg-white p-6">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-semibold text-ink">Admissions & revenue</h2>
-                    <span className="text-xs text-muted">{range}</span>
-                  </div>
-                  <div className="mt-4 h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={trendChart}>
-                        <CartesianGrid stroke="#E2E8F0" vertical={false} />
-                        <XAxis dataKey="period" tick={{ fill: "#64748B", fontSize: 12 }} />
-                        <YAxis tick={{ fill: "#64748B", fontSize: 12 }} />
-                        <Tooltip {...tooltipStyle} />
-                        <Line
-                          type="monotone"
-                          dataKey="admissions"
-                          stroke="#2563EB"
-                          strokeWidth={2}
-                          dot={false}
-                          name="Admissions"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="revenue"
-                          stroke="#0D9488"
-                          strokeWidth={2}
-                          dot={false}
-                          name="Revenue ($M)"
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              )}
-
+            <div className="mt-8">
               {/* Scorecards */}
               {scorecardsAsync.loading && <ChartSkeleton title="Department benchmarking" />}
               {scorecardsAsync.failed && (
@@ -595,7 +491,7 @@ export function ExecutiveWorkspace() {
 
         {tab === "insights" && (
           <motion.div
-            key={`insights-${range}-${orgId}`}
+            key={`insights-${range}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="space-y-5"
@@ -676,7 +572,7 @@ export function ExecutiveWorkspace() {
 
         {tab === "reports" && (
           <motion.div
-            key={`reports-${range}-${orgId}`}
+            key={`reports-${range}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="space-y-6"

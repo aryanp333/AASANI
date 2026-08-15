@@ -12,6 +12,9 @@ import { PricingPage } from "./pages/PricingPage";
 import { ResourcesPage } from "./pages/ResourcesPage";
 import { ContactPage } from "./pages/ContactPage";
 import { ExperiencePage } from "./pages/ExperiencePage";
+import { LoginPage } from "./pages/LoginPage";
+import { SignupPage } from "./pages/SignupPage";
+import { RequireAuth } from "./components/auth/RequireAuth";
 
 /**
  * Only one experience route. Marketing pages never embed ExecutiveWorkspace
@@ -94,8 +97,31 @@ function App() {
                 </PageTransition>
               }
             />
+            <Route
+              path="/login"
+              element={
+                <PageTransition>
+                  <LoginPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <PageTransition>
+                  <SignupPage />
+                </PageTransition>
+              }
+            />
             {/* Canonical experience — sole mount of ProductBoot → ExecutiveWorkspace */}
-            <Route path="/experience" element={<ExperiencePage />} />
+            <Route
+              path="/experience"
+              element={
+                <RequireAuth>
+                  <ExperiencePage />
+                </RequireAuth>
+              }
+            />
             <Route path="/simulation" element={<Navigate to="/experience" replace />} />
             <Route path="/dashboard" element={<Navigate to="/experience" replace />} />
             <Route path="/about" element={<Navigate to="/platform" replace />} />
